@@ -35,6 +35,7 @@ namespace Tcp {
 namespace MetadataExchange {
 
 using ::Envoy::Extensions::Common::Wasm::WasmStatePrototype;
+using ::Envoy::Extensions::Common::Wasm::WasmStatePrototypeConstSharedPtr;
 
 /**
  * All MetadataExchange filter stats. @see stats_macros.h
@@ -82,12 +83,12 @@ class MetadataExchangeConfig {
   // Stats for MetadataExchange Filter.
   MetadataExchangeStats stats_;
 
-  static const WasmStatePrototype& nodeInfoPrototype() {
-    static const WasmStatePrototype* const prototype = new WasmStatePrototype(
+  static WasmStatePrototypeConstSharedPtr nodeInfoPrototype() {
+    static const WasmStatePrototypeConstSharedPtr prototype = std::make_shared<const WasmStatePrototype>(
         true, ::Envoy::Extensions::Common::Wasm::WasmType::FlatBuffers,
         ::Wasm::Common::nodeInfoSchema(),
         StreamInfo::FilterState::LifeSpan::DownstreamConnection);
-    return *prototype;
+    return prototype;
   }
 
  private:

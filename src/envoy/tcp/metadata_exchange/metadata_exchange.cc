@@ -307,7 +307,7 @@ void MetadataExchangeFilter::updatePeer(
 
 void MetadataExchangeFilter::updatePeerId(absl::string_view key,
                                           absl::string_view value) {
-  WasmStatePrototype prototype(
+  WasmStatePrototypeConstSharedPtr prototype = std::make_shared<const WasmStatePrototype>(
       true, ::Envoy::Extensions::Common::Wasm::WasmType::String,
       absl::string_view(),
       StreamInfo::FilterState::LifeSpan::DownstreamConnection);
@@ -316,7 +316,7 @@ void MetadataExchangeFilter::updatePeerId(absl::string_view key,
   state->setValue(value);
   read_callbacks_->connection().streamInfo().filterState()->setData(
       absl::StrCat("wasm.", key), std::move(state),
-      StreamInfo::FilterState::StateType::Mutable, prototype.life_span_);
+      StreamInfo::FilterState::StateType::Mutable, prototype->life_span_);
 }
 
 void MetadataExchangeFilter::getMetadata(google::protobuf::Struct* metadata) {

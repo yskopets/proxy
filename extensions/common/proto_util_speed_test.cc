@@ -31,6 +31,9 @@ namespace Common {
 
 using namespace google::protobuf::util;
 
+using ::Envoy::Extensions::Common::Wasm::WasmStatePrototype;
+using ::Envoy::Extensions::Common::Wasm::WasmStatePrototypeConstSharedPtr;
+
 constexpr absl::string_view node_metadata_json = R"###(
 {
    "NAME":"test_pod",
@@ -60,7 +63,7 @@ constexpr absl::string_view node_id = "test_pod.test_namespace";
 
 static void setData(Envoy::StreamInfo::FilterStateImpl& filter_state,
                     absl::string_view key, absl::string_view value) {
-  Envoy::Extensions::Common::Wasm::WasmStatePrototype prototype;
+  WasmStatePrototypeConstSharedPtr prototype = std::make_shared<const WasmStatePrototype>();
   auto state_ptr =
       std::make_unique<Envoy::Extensions::Common::Wasm::WasmState>(prototype);
   state_ptr->setValue(value);
